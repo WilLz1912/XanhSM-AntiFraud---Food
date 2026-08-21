@@ -9,7 +9,6 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
-from streamlit_autorefresh import st_autorefresh
 
 from data_io import load_orders_slim
 
@@ -139,12 +138,12 @@ def build_daily_trend(_orders, _cases):
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════════════════════════════════════
-st_autorefresh(interval=30_000, key="dashboard_autorefresh")
-
 st.title("Dashboard Tổng hợp")
+if st.button("🔄 Làm mới"):
+    st.rerun()
 st.caption(
-    "Tự làm mới mỗi 30 giây — trạng thái xác minh (Trang 4) sẽ cập nhật gần như ngay lập tức. "
-    "Các số liệu khác cache 60 giây."
+    "Bấm 'Làm mới' để cập nhật trạng thái xác minh (Trang 4) mới nhất. "
+    "Các số liệu khác tự cache 60 giây."
 )
 
 df_cases = load_cases()
