@@ -14,6 +14,8 @@ import matplotlib.patches as mpatches
 import networkx as nx
 import streamlit as st
 
+from data_io import load_orders_full
+
 st.set_page_config(
     page_title="Chi tiết Entity — XanhSM Fraud",
     layout="wide",
@@ -29,7 +31,6 @@ GRAPH_EDGES_PATH    = os.path.join(DATA_DIR, "graph_edges.parquet")
 GRAPH_COMM_PATH     = os.path.join(DATA_DIR, "graph_communities.parquet")
 CASES_FEAT_PATH     = os.path.join(DATA_DIR, "cases_with_features.parquet")
 DRIVER_SCORES_PATH  = os.path.join(DATA_DIR, "driver_scores.parquet")
-ORDERS_FULL_PATH    = os.path.join(DATA_DIR, "orders_full.parquet")
 
 # ── Quy tắc: mỗi rule file → (tên hiển thị, cột customer, cột driver, cột merchant) ──
 # None = rule không dùng loại entity đó
@@ -69,10 +70,6 @@ def load_cases_with_features():
 @st.cache_data
 def load_driver_scores():
     return pd.read_parquet(DRIVER_SCORES_PATH)
-
-@st.cache_data
-def load_orders():
-    return pd.read_parquet(ORDERS_FULL_PATH)
 
 @st.cache_data
 def load_rule_file(fname):
@@ -422,7 +419,7 @@ with tab_anomaly:
 with tab_orders:
     st.subheader("Lịch sử đơn hàng")
 
-    df_orders = load_orders()
+    df_orders = load_orders_full()
 
     # Lọc đơn theo đúng cột của entity_type
     if id_col not in df_orders.columns:

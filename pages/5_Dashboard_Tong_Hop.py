@@ -11,6 +11,8 @@ import plotly.express as px
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
+from data_io import load_orders_full
+
 st.set_page_config(
     page_title="Dashboard Tổng hợp — XanhSM Fraud",
     layout="wide",
@@ -21,7 +23,6 @@ DATA_DIR = os.path.join(APP_DIR, "data")
 RULES_DIR = os.path.join(DATA_DIR, "rules")
 
 CASES_PATH = os.path.join(DATA_DIR, "cases.parquet")
-ORDERS_PATH = os.path.join(DATA_DIR, "orders_full.parquet")
 DRIVER_SCORES_PATH = os.path.join(DATA_DIR, "driver_scores.parquet")
 ENTITY_SUMMARY = {
     "customer": os.path.join(DATA_DIR, "entity_summary_customer.parquet"),
@@ -50,11 +51,6 @@ RULE_MONEY_CONFIG = {
 @st.cache_data(ttl=60)
 def load_cases():
     return pd.read_parquet(CASES_PATH)
-
-
-@st.cache_data(ttl=60)
-def load_orders():
-    return pd.read_parquet(ORDERS_PATH)
 
 
 @st.cache_data(ttl=60)
@@ -152,7 +148,7 @@ st.caption(
 )
 
 df_cases = load_cases()
-df_orders = load_orders()
+df_orders = load_orders_full()
 df_driver = load_driver_scores()
 df_verif = load_verifications()
 

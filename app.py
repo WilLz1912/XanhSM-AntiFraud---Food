@@ -16,6 +16,8 @@ import community as community_louvain
 from sklearn.ensemble import IsolationForest
 import streamlit as st
 
+from data_io import load_orders_full
+
 st.set_page_config(
     page_title="XanhSM Fraud Pipeline — Data, Rules & Models",
     layout="wide",
@@ -51,10 +53,11 @@ def load_baseline_orders() -> pd.DataFrame:
 
 def get_current_orders() -> pd.DataFrame:
     if os.path.exists(ORDERS_FULL_PATH):
-        return pd.read_parquet(ORDERS_FULL_PATH)
+        return load_orders_full()
     else:
         df_base = load_baseline_orders()
         df_base.to_parquet(ORDERS_FULL_PATH, index=False)
+        load_orders_full.clear()
         return df_base
 
 
@@ -91,6 +94,7 @@ if uploaded_file is not None:
             n_after = len(df_deduped)
             n_duplicates = n_before - n_after
             df_deduped.to_parquet(ORDERS_FULL_PATH, index=False)
+            load_orders_full.clear()
 
             st.success("Khử trùng lặp thành công!")
             r1, r2, r3, r4 = st.columns(4)
@@ -202,7 +206,7 @@ if st.button("Dựng lại Graph Community (Louvain) từ cases.parquet"):
         st.error("Chưa có cases.parquet — không thể dựng đồ thị.")
     else:
         with st.spinner("Đang dựng đồ thị C-D-M và chạy Louvain..."):
-            df_orders = pd.read_parquet(ORDERS_FULL_PATH)
+            df_orders = load_orders_full()
 
             edges_cd = (
                 df_orders.assign(u="C_" + df_orders["customer_id"], v="D_" + df_orders["driver_id"])
@@ -270,5 +274,6 @@ if st.button("Khôi phục dữ liệu 10 ngày ban đầu (Reset All Data)"):
     with st.spinner("Đang khôi phục..."):
         df_base = load_baseline_orders()
         df_base.to_parquet(ORDERS_FULL_PATH, index=False)
+        load_orders_full.clear()
         st.success("Đã khôi phục về dữ liệu 10 ngày chuẩn!")
         st.rerun()
