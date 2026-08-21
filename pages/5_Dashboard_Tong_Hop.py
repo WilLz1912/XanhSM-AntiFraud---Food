@@ -11,7 +11,7 @@ import plotly.express as px
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
-from data_io import load_orders_full
+from data_io import load_orders_slim
 
 st.set_page_config(
     page_title="Dashboard Tổng hợp — XanhSM Fraud",
@@ -139,16 +139,16 @@ def build_daily_trend(_orders, _cases):
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════════════════════════════════════
-st_autorefresh(interval=15_000, key="dashboard_autorefresh")
+st_autorefresh(interval=30_000, key="dashboard_autorefresh")
 
 st.title("Dashboard Tổng hợp")
 st.caption(
-    "Tự làm mới mỗi 15 giây — trạng thái xác minh (Trang 4) sẽ cập nhật gần như ngay lập tức. "
+    "Tự làm mới mỗi 30 giây — trạng thái xác minh (Trang 4) sẽ cập nhật gần như ngay lập tức. "
     "Các số liệu khác cache 60 giây."
 )
 
 df_cases = load_cases()
-df_orders = load_orders_full()
+df_orders = load_orders_slim()
 df_driver = load_driver_scores()
 df_verif = load_verifications()
 

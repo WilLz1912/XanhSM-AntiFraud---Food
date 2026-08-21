@@ -23,3 +23,15 @@ ORDERS_FULL_PATH = os.path.join(DATA_DIR, "orders_full.parquet")
 @st.cache_data
 def load_orders_full() -> pd.DataFrame:
     return pd.read_parquet(ORDERS_FULL_PATH)
+
+
+# Dashboard (pages/5) only needs these 3 columns for its KPIs/trend chart —
+# reading just them keeps that page's footprint at ~20MB instead of the
+# ~350MB full table, since it auto-refreshes every 15-30s and otherwise
+# keeps the full table permanently resident just to sit on that page.
+DASHBOARD_ORDER_COLS = ["customer_id", "merchant_id", "order_time_local_tz"]
+
+
+@st.cache_data
+def load_orders_slim() -> pd.DataFrame:
+    return pd.read_parquet(ORDERS_FULL_PATH, columns=DASHBOARD_ORDER_COLS)
