@@ -36,9 +36,9 @@ DRIVER_SCORES_PATH = os.path.join(DATA_DIR, "driver_scores.parquet")
 GRAPH_EDGES_PATH = os.path.join(DATA_DIR, "graph_edges.parquet")
 GRAPH_COMM_PATH = os.path.join(DATA_DIR, "graph_communities.parquet")
 
-ROOT_DIR = os.path.dirname(APP_DIR)
-BASELINE_F1 = os.path.join(ROOT_DIR, "orders_food_masked_2026-07-12_2026-07-14.parquet")
-BASELINE_F2 = os.path.join(ROOT_DIR, "orders_food_masked_2026-07-24_2026-07-31.parquet")
+BASELINE_DIR = os.path.join(DATA_DIR, "baseline")
+BASELINE_F1 = os.path.join(BASELINE_DIR, "orders_food_masked_2026-07-12_2026-07-14.parquet")
+BASELINE_F2 = os.path.join(BASELINE_DIR, "orders_food_masked_2026-07-24_2026-07-31.parquet")
 
 
 def load_baseline_orders() -> pd.DataFrame:
