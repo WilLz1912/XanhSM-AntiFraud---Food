@@ -128,10 +128,9 @@ def render_entity_tab(
         else:
             st.warning(f"Không tìm thấy `{lookup_input.strip()}` trong danh sách đang hiển thị.")
 
-    # ── Nút chọn nhanh từ Top 10 ──────────────────────────────────────────────
-    st.write("**Chọn nhanh từ Top 10 rủi ro cao nhất:**")
-    top10 = df_filtered.head(10)
-    for _, row in top10.iterrows():
+    # ── Nút chọn nhanh — toàn bộ danh sách đang hiển thị (cùng 200 dòng ở bảng trên) ──
+    st.write(f"**Chọn để xem Chi tiết** (toàn bộ {len(display_df):,} dòng đang hiển thị, sort theo {score_col} giảm dần):")
+    for _, row in display_df.iterrows():
         eid = row[id_col]
         score_val = row[score_col]
         tier_val = row[tier_col]
